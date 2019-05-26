@@ -1,4 +1,4 @@
 // Core Game
 
 
-//game_mole_create(7);
+game_mole_loop_start();
