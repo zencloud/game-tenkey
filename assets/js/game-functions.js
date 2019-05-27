@@ -52,6 +52,7 @@ gameData = {
 
     gameSpeedCurrent: [],
     gameLoopRunning: false,
+    gameInputAllowed: false,
 
     // Player Stats
     playerHitTotal:  0,
@@ -142,8 +143,10 @@ function game_mole_create() {
 // --- Get Player Input
 document.addEventListener("keyup", function (event) {
 
-    // Check if Number
+    // Disable from running
+    if (!gameData.gameInputAllowed) { return }
 
+    // Check if Number
     if (!isNaN(event.key)) {
 
         // Convert key to number
@@ -194,12 +197,9 @@ document.addEventListener("keyup", function (event) {
 // --- Round Start
 function game_round_start () {
 
-    // Hide Button
-    let btnEle = document.getElementsByClassName("btn")[0];
-    let timeEle = document.getElementsByClassName("display-time")[0];
-    btnEle.style.display = "none";
-    timeEle.style.display = "block";
-
+    // Enable Player Input
+    gameData.gameInputAllowed = true;
+    
     // Start Game Loop
     game_mole_loop_start();
 
@@ -210,6 +210,12 @@ function game_round_start () {
     gameData.playerHitTotal  = 0;
     gameData.playerMissTotal = 0;
     game_ui_update_game_info();
+
+    // Hide/Show Button/Timer
+    let btnEle = document.getElementsByClassName("btn")[0];
+    let timeEle = document.getElementsByClassName("display-time")[0];
+    btnEle.style.display = "none";
+    timeEle.style.display = "block";
 }
 
 // --- Round End
