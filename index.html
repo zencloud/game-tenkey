@@ -59,13 +59,19 @@
      
         <!-- Game Info -->
         <div class="game-info-container">
-            <p>Correct Total: <span id="game-info-input-correct-total">0</span></p>
-            <p>Wrong Total: <span id="game-info-input-wrong-total">0</span></p>
+            <div class="game-info-cell">
+                <p>Hit</p>
+                <span id="game-info-display-hit" class="display-bold">0</span></div>
+            <div class="game-info-cell">
+                <p>Miss</p>
+                <span id="game-info-display-miss" class="display-bold">0</span></div>
         </div>
 
-        <div class="btn">
-            <button onclick="game_mole_loop_start()">Start Loop</button>
+        <div class="btn-container">
+            <button class="btn" onclick="game_round_start()">Start Round!</button>
+            <p class="display-time"><span id="display-time-remaining"></span> seconds remaining!</p>
         </div>
+
         <!-- End of Div -->
     </div>
 

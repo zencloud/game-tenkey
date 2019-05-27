@@ -1,6 +1,39 @@
 // Core Game Functions
 
-// Game Variables
+
+// Round Timer Object 
+roundTimer = {
+
+    delay: 25000,
+    start: 0,
+    updateInterval: null,
+    
+    timeRemaining: function() {
+        return this.delay - (Date.now() - this.start);
+    },
+
+    setTimer: function () {
+
+        // Set time started
+        this.start = Date.now();
+        
+        // Set Interval Update
+        this.updateInterval = setInterval(() => {
+            let timeEle = document.getElementById("display-time-remaining");
+            timeEle.textContent = Math.round(roundTimer.timeRemaining()/1000);
+        }, 50);
+
+        // Set Timer Stop Time
+        setTimeout(() => {
+           
+            // End Round
+           clearInterval(roundTimer.updateInterval);
+           game_round_end();
+        }, this.delay);
+    }
+}
+
+// Game Objects/Variables
 gameData = {
 
     // Game Cells Used
@@ -21,23 +54,24 @@ gameData = {
     gameLoopRunning: false,
 
     // Player Stats
-    playerInputCorrectTotal: 0,
-    playerInputWrongTotal: 0
+    playerHitTotal:  0,
+    playerMissTotal: 0,
+    playerBestHit:   0
 }
 
 // Update Gamespeed
-gameData.gameSpeedCurrent = gameData.gameSpeedOptions.normal;
+gameData.gameSpeedCurrent = gameData.gameSpeedOptions.fast;
 
 // --- Update DOM UI Game Info
 function game_ui_update_game_info() {
 
     // Get DOM elements
-    let correctDiv = document.getElementById("game-info-input-correct-total");
-    let wrongDiv = document.getElementById("game-info-input-wrong-total");
+    let correctDiv  = document.getElementById("game-info-display-hit");
+    let wrongDiv    = document.getElementById("game-info-display-miss");
 
     // Update Elements with current info
-    correctDiv.textContent = gameData.playerInputCorrectTotal;
-    wrongDiv.textContent = gameData.playerInputWrongTotal;
+    correctDiv.textContent = gameData.playerHitTotal;
+    wrongDiv.textContent = gameData.playerMissTotal;
 }
 
 // --- FX: Create Impact Flash
@@ -53,6 +87,21 @@ function fx_create_flash(cellNumber) {
     flashDivTimer = setTimeout(() => {
         moleDiv.removeChild(flashDiv);
     }, 50);
+}
+
+// --- FX: Create Impact Flash
+function fx_create_flash_wrong(cellNumber) {
+
+    let cellID = "c" + cellNumber;
+    let moleDiv = document.getElementById(cellID);
+    let flashDiv = document.createElement("div");
+    flashDiv.classList.add("fx-flash");
+    flashDiv.innerHTML = `<img src="assets/imgs/fx_wrong.png">`;
+    moleDiv.appendChild(flashDiv);
+
+    flashDivTimer = setTimeout(() => {
+        moleDiv.removeChild(flashDiv);
+    }, 400);
 }
 
 // --- Mole is created at cell spot
@@ -90,7 +139,6 @@ function game_mole_create() {
     }, 1500);
 }
 
-
 // --- Get Player Input
 document.addEventListener("keyup", function (event) {
 
@@ -105,17 +153,20 @@ document.addEventListener("keyup", function (event) {
         if (gameData.cellMatrix[cellNumber - 1] === 0) {
 
             // Update Game Value: Correct Inputs
-            gameData.playerInputWrongTotal++;
+            gameData.playerMissTotal++;
 
             // Update Game Info Dom
             game_ui_update_game_info();
+
+            // Wrong
+            fx_create_flash_wrong(cellNumber);
         }
 
         // Correct Input
         if (gameData.cellMatrix[cellNumber - 1] === 1) {
 
             // Update Game Value: Correct Inputs
-            gameData.playerInputCorrectTotal++;
+            gameData.playerHitTotal++;
 
             // Update Game Info Dom
             game_ui_update_game_info();
@@ -140,7 +191,40 @@ document.addEventListener("keyup", function (event) {
     }
 });
 
+// --- Round Start
+function game_round_start () {
 
+    // Hide Button
+    let btnEle = document.getElementsByClassName("btn")[0];
+    let timeEle = document.getElementsByClassName("display-time")[0];
+    btnEle.style.display = "none";
+    timeEle.style.display = "block";
+
+    // Start Game Loop
+    game_mole_loop_start();
+
+    // Set Round Timer
+    roundTimer.setTimer();
+
+    // Reset Player Round Data
+    gameData.playerHitTotal  = 0;
+    gameData.playerMissTotal = 0;
+    game_ui_update_game_info();
+}
+
+// --- Round End
+function game_round_end () {
+
+    // Update Button/Time DOM
+    let btnEle = document.getElementsByClassName("btn")[0];
+    let timeEle = document.getElementsByClassName("display-time")[0];
+    btnEle.style.display = "inline-block";
+    timeEle.style.display = "none";
+
+    // Stop Mole Loop
+    game_mole_loop_stop();
+
+}
 // --- Mole Loop Start Running
 function game_mole_loop_start() {
     gameData.gameLoopRunning = true;
@@ -157,5 +241,4 @@ function game_mole_loop_stop() {
     clearTimeout(gameData.moleLoopTimeout);
     gameData.moleLoopTimeout = -1;
     gameData.gameLoopRunning = false;
-
 }

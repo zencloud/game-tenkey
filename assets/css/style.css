@@ -33,7 +33,7 @@ body, html {
 .mole-cell {
     position: relative;
     width: 33.3%;
-    height: 150px;
+    height: 125px;
     background-image: url('../../assets/imgs/hole.png');
     background-position: center;
     background-position-y: 90%;
@@ -43,7 +43,8 @@ body, html {
 .fx-flash {
     position: absolute;
     z-index: 1;
-    left: 25px;
+	left: 25px;
+	top: -20px;
 }
 
 /* BORDERS */
@@ -53,6 +54,7 @@ body, html {
     border-bottom: 1px;
     border-style: dashed;
     border-color: rgb(255, 255, 255, 0.3);
+    border-image: url("../../assets/imgs/border.png") 2 round;
 }
 
 .t3, .t6 {
@@ -61,6 +63,7 @@ body, html {
     border-bottom: 1px;
     border-style: dashed;
     border-color: rgb(255, 255, 255, 0.3);
+    border-image: url("../../assets/imgs/border.png") 2 round;
 }
 
 .t7, .t8 {
@@ -69,6 +72,7 @@ body, html {
     border-bottom: 0px;
     border-style: dashed;
     border-color: rgb(255, 255, 255, 0.3);
+    border-image: url("../../assets/imgs/border.png") 2 round;
 }
 
 .t9 {
@@ -77,29 +81,60 @@ body, html {
     border-bottom: 0px;
     border-style: dashed;
     border-color: rgb(255, 255, 255, 0.3);
+    border-image: url("../../assets/imgs/border.png") 2 round;
 }
 
 .mole-img {
     position: absolute;
     left: 55px;
-    top: 20px;
+    top: -4px;
 }
 
 .game-info-container {
+	display: flex;
+	justify-content: space-evenly;
+	align-items: center;
     margin: 0 auto;
     margin-top: 10px;
     width: 600px;
+    height: 65px;
     padding: 10px;
     background-color: #282828;
-    height: 80px;
-    border-radius: 15px;
+	border-radius: 15px;
+}
+
+.game-info-cell {
+	text-align: center;
+}
+
+.display-bold {
+	font-size: 30px;
+	color: orange;
+}
+
+.btn-container {
+	margin: 0 auto;
+	text-align: center;
 }
 
 .btn {
-  margin: 0 auto;
-  text-align: center;
+	width: 150px;
+	height: 50px;
+	margin-top: 20px;
+	font-family: 'Roboto', sans-serif;
+	font-size: 20px;
+	font-weight: 500;
+	color: #282828;
+	border: none;
+	border-radius: 30px;
 }
 
+.display-time {
+	font-size: 20px;
+	font-weight: 200;
+	margin-top: 25px;
+	display: none;
+}
 /* ANIAMTION */
 
 /* --- Scale Vertical Bottom */
